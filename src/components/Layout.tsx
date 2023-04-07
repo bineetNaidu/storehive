@@ -18,7 +18,7 @@ export const Layout: FC<{
         />
         <link rel="icon" href="/thirteen.svg" />
       </Head>
-      <main className={`min-h-screen p-4 h-full ${roboto.className}`}>
+      <main className={`min-h-screen h-full ${roboto.className}`}>
         <Navbar />
         {children}
       </main>
