@@ -1,3 +1,4 @@
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { FC } from 'react';
 import { ShoppingCart, User } from 'react-feather';
@@ -17,6 +18,8 @@ const Button: FC<ButtonProps> = ({ tittle, icon }) => {
 };
 
 export const Navbar: FC = () => {
+  const { isLoaded, isSignedIn, user } = useUser();
+
   return (
     <nav className="flex justify-between mx-auto px-8 py-4">
       <div className="">
@@ -35,7 +38,9 @@ export const Navbar: FC = () => {
           className="border border-orange-400 border-transparent hover:border-orange-700 rounded-xl px-3 py-1 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-orange-200 focus:ring-offset-opacity-50
 					"
         />
-        <Button tittle="My Account" icon={<User />} />
+        <Link href={isLoaded && isSignedIn ? '/user/account' : '/login'}>
+          <Button tittle="My Account" icon={<User />} />
+        </Link>
         <Button tittle="Cart" icon={<ShoppingCart />} />
       </div>
     </nav>
