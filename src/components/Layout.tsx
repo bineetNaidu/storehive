@@ -3,7 +3,10 @@ import { FC } from 'react';
 import { Navbar } from './Navbar';
 import { Roboto } from 'next/font/google';
 
-const roboto = Roboto({ subsets: ['latin'], weight: '300' });
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['100', '300', '400', '500', '700', '900'],
+});
 
 export const Layout: FC<{
   children: React.ReactNode;
