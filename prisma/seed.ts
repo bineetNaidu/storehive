@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 export const prismaClient = new PrismaClient();
 
 export async function seed() {
-  const categories_data = ['Electronics', 'Books', 'Fashion', 'Furniture'];
+  const categories_data = ['electronics', 'books', 'fashion', 'furniture'];
 
   for (let index = 0; index < categories_data.length; index++) {
     const element = categories_data[index];
@@ -26,7 +26,7 @@ export async function seed() {
       brand: 'Apple',
       category: {
         connect: {
-          name: 'Electronics',
+          name: 'electronics',
         },
       },
     },
@@ -40,7 +40,7 @@ export async function seed() {
         'https://images.unsplash.com/photo-1607936854279-55e8a4c64888?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aXBob25lJTIwMTJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
       category: {
         connect: {
-          name: 'Electronics',
+          name: 'electronics',
         },
       },
     },
@@ -54,7 +54,7 @@ export async function seed() {
         'https://images.unsplash.com/photo-1603162610423-af7febeca563?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJpZGUlMjBhbmQlMjBwcmVqdWRpY2UlMjBib29rfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
       category: {
         connect: {
-          name: 'Books',
+          name: 'books',
         },
       },
     },
@@ -68,7 +68,7 @@ export async function seed() {
       price: 9.99,
       category: {
         connect: {
-          name: 'Books',
+          name: 'books',
         },
       },
     },
@@ -82,7 +82,7 @@ export async function seed() {
         'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8bG9zc2UlMjBmaXQlMjB0JTIwc2hpcnR8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
       category: {
         connect: {
-          name: 'Fashion',
+          name: 'fashion',
         },
       },
     },
@@ -96,7 +96,7 @@ export async function seed() {
         'https://images.unsplash.com/photo-1512327428889-607eeb19efe8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDB8fHRzaGlydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
       category: {
         connect: {
-          name: 'Fashion',
+          name: 'fashion',
         },
       },
     },

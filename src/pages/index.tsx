@@ -33,22 +33,22 @@ const HomePage: NextPage = () => {
           <CategoryCard
             title="Electronics"
             imageUrl="/electronic-category.jpg"
-            href="/products/electronics"
+            href="/category/electronics"
           />
           <CategoryCard
             title="Fashion"
             imageUrl="/fashion-category.jpg"
-            href="/products/fashion"
+            href="/category/fashion"
           />
           <CategoryCard
             title="Book"
             imageUrl="/book-category.jpg"
-            href="/products/books"
+            href="/category/books"
           />
           <CategoryCard
             title="Furniture"
             imageUrl="/furniture-category.jpg"
-            href="/products/furniture"
+            href="/category/furniture"
           />
         </div>
       </article>

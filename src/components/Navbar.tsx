@@ -41,12 +41,7 @@ export const Navbar: FC = () => {
         <div className="flex gap-4">
           {isLoaded && isSignedIn ? (
             <>
-              <UserButton
-                showName
-                signInUrl="/login"
-                afterSignOutUrl="/"
-                userProfileMode="navigation"
-              />
+              <UserButton showName signInUrl="/login" afterSignOutUrl="/" />
               <Button tittle="Cart" icon={<ShoppingCart />} />
             </>
           ) : (

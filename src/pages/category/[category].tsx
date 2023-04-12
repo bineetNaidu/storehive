@@ -45,9 +45,15 @@ const CategoryProductPage: NextPage<PageProps> = ({ category }) => {
       </h1>
 
       <div className="grid grid-cols-5 gap-4 py-5">
-        {category.product.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {category.product.length > 0 ? (
+          category.product.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        ) : (
+          <div className="col-span-5 text-center py-y text-3xl italic">
+            No products found ;(
+          </div>
+        )}
       </div>
     </main>
   );
