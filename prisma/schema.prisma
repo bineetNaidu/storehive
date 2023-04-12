@@ -17,7 +17,7 @@ model User {
   referrerId    Int             @map("referrer_id")
   createdAt     DateTime        @default(now()) @map("created_at")
   updatedAt     DateTime        @default(now()) @map("updated_at")
-  ProductReview ProductReview[]
+  productReview ProductReview[]
 }
 
 model Category {
@@ -25,7 +25,7 @@ model Category {
   name      String    @unique()
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @default(now()) @map("updated_at")
-  Product   Product[]
+  product   Product[]
 }
 
 model Product {
@@ -48,7 +48,7 @@ model ProductReview {
   comment   String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
-  Product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
   productId Int      @map("product_id")
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int      @map("author_id")
