@@ -9,7 +9,7 @@ type Props = {
 
 export const ProductCard: FC<Props> = ({ product }) => {
   return (
-    <article className="h-fit flex flex-col justify-between p-4 border border-gray-200 rounded-lg transition duration-300 ease-in-out hover:shadow-lg hover:border-gray-300">
+    <article className="h-fit flex flex-col justify-between rounded-lg transition duration-300 ease-in-out hover:shadow-2xl">
       <Link href={`/product/${product.id}`}>
         <div className="flex-auto ">
           <Image

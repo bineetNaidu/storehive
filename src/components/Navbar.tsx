@@ -10,7 +10,7 @@ type ButtonProps = {
 
 const Button: FC<ButtonProps> = ({ tittle, icon }) => {
   return (
-    <button className="flex items-center justify-center text-gray-700 hover:text-orange-500 transition-all text-sm font-semibold">
+    <button className="flex items-center justify-center text-gray-500 hover:text-orange-300 transition-all text-sm font-semibold tracking-wider">
       {!!icon && <span>{icon}</span>}
       <span className="ml-2">{tittle}</span>
     </button>
@@ -35,8 +35,7 @@ export const Navbar: FC = () => {
         <input
           placeholder="Search"
           type="text"
-          className="border border-orange-400 border-transparent hover:border-orange-700 rounded-xl px-3 py-1 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-orange-200 focus:ring-offset-opacity-50
-					"
+          className="border border-orange-400 border-transparent hover:border-orange-700 rounded-xl px-3 py-1 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-orange-200 focus:ring-offset-opacity-50"
         />
         <div className="flex gap-4">
           {isLoaded && isSignedIn ? (
