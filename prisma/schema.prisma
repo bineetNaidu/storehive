@@ -14,7 +14,8 @@ model User {
   id            Int             @id @default(autoincrement())
   name          String
   email         String          @unique
-  referrerId    Int             @map("referrer_id")
+  avatarUrl     String          @map("avatar_url")
+  referrerId    Int             @unique @map("referrer_id")
   createdAt     DateTime        @default(now()) @map("created_at")
   updatedAt     DateTime        @default(now()) @map("updated_at")
   productReview ProductReview[]
@@ -50,6 +51,6 @@ model ProductReview {
   updatedAt DateTime @default(now()) @map("updated_at")
   product   Product  @relation(fields: [productId], references: [id])
   productId Int      @map("product_id")
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [referrerId])
   authorId  Int      @map("author_id")
 }
