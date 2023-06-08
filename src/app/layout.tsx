@@ -2,6 +2,8 @@ import { Navbar } from '@/components/Navbar';
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { Footer } from '@/components/Footer';
+import { NextAuthProvider } from '@/components/NextAuthProvider';
+import { ToastContainer } from 'react-toastify';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,9 +22,23 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-brand-primary min-h-screen container mx-auto md:px-4 h-full`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <NextAuthProvider>
+          <Navbar />
+          {children}
+          <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
+          <Footer />
+        </NextAuthProvider>
       </body>
     </html>
   );
