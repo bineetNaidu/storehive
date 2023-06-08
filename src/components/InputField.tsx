@@ -17,7 +17,7 @@ export const InputField: FC<Props> = ({ label, message, ...fieldProps }) => {
       />
       {message && (
         <label className="label">
-          <span className="label-text-alt">{message}</span>
+          <span className="label-text-alt text-red-500">{message}</span>
         </label>
       )}
     </div>
