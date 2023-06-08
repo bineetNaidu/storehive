@@ -11,16 +11,17 @@ services:
       POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
       POSTGRES_DB: storehive_db # The PostgreSQL default database (automatically created at first launch)
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - ./db-data:/var/lib/postgresql/data
 
-  phppgadmin:
-      image: dpage/pgadmin4
-      restart: always
-      environment:
-        PGADMIN_DEFAULT_EMAIL: admin@example.com
-        PGADMIN_DEFAULT_PASSWORD: adminpassword
-      ports:
-        - 8080:80
+  adminer_container:
+    image: adminer:latest
+    environment: 
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DESIGN: galkaev
+    ports: 
+      - 8080:8080
+    depends_on: 
+      - db
 
 volumes:
   db-data:
