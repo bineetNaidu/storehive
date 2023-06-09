@@ -1,11 +1,11 @@
-import { Category, Product } from '@prisma/client';
+import type { Category, Product } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
 type Props = Product & {
   isNew?: boolean;
-  categories: Category[];
+  categories: Category[] | Pick<Category, 'name' | 'id'>[];
 };
 
 export const ProductCard: FC<Props> = (props) => {
