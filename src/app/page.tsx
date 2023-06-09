@@ -1,12 +1,44 @@
 import { Button } from '@/components/Button';
 import { ProductCard } from '@/components/ProductCard';
-import { getTopDeals, getTopProducts } from '@/lib/queries';
+import { Category, Product } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
+type Result = {
+  result: (Product & {
+    categories: Category[] | Pick<Category, 'id' | 'name'>[];
+  })[];
+  count: number;
+};
+
+const fetchDeals = async () => {
+  const res = await fetch('http://localhost:3000/api/products/deals?limit=4', {
+    next: { revalidate: 10 },
+  });
+  if (!res.ok) {
+    return [];
+  }
+  const data: Result = await res.json();
+  return data.result;
+};
+
+const fetchTopProducts = async () => {
+  const res = await fetch(
+    'http://localhost:3000/api/products/top-product?limit=4&minPrice=500',
+    {
+      next: { revalidate: 10 },
+    }
+  );
+  if (!res.ok) {
+    return [];
+  }
+  const data: Result = await res.json();
+  return data.result;
+};
+
 export default async function Home() {
-  const topDeals = await getTopDeals({ includeCategories: true });
-  const topProducts = await getTopProducts({ includeCategories: true });
+  const topDeals = await fetchDeals();
+  const topProducts = await fetchTopProducts();
 
   return (
     <main>
