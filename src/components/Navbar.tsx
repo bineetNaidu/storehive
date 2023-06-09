@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
 import { Button } from './Button';
+import { NavAuthCtx } from './NavAuthCtx';
 
 type Props = {};
 
@@ -80,11 +81,7 @@ export const Navbar: FC<Props> = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link href="/signin">
-          <Button size="lg" varient="outlined">
-            Sign in
-          </Button>
-        </Link>
+        <NavAuthCtx />
       </div>
     </nav>
   );
