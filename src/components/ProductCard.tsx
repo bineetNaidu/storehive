@@ -1,14 +1,11 @@
+import { Category, Product } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
-type Props = {
-  id: number;
-  name: string;
-  description: string;
-  imageUrl: string;
+type Props = Product & {
   isNew?: boolean;
-  categories: string[];
+  categories: Category[];
 };
 
 export const ProductCard: FC<Props> = (props) => {
@@ -17,7 +14,7 @@ export const ProductCard: FC<Props> = (props) => {
       <div className="card w-[350px] shadow-xl glass group cursor-pointer hover:scale-105 transition-all duration-500 ease-in-out">
         <figure className="flex-1">
           <Image
-            src={props.imageUrl}
+            src={props.image}
             alt={props.name}
             width={500}
             height={500}
@@ -29,13 +26,22 @@ export const ProductCard: FC<Props> = (props) => {
             {props.name}
             {props.isNew && <div className="badge badge-secondary">NEW</div>}
           </h2>
-          <p>{props.description}</p>
-          <div className="card-actions justify-end">
-            {props.categories.map((category) => (
-              <div key={category} className="badge badge-outline">
-                {category}
-              </div>
-            ))}
+          <p>
+            {props.description.length > 100
+              ? props.description.slice(0, 100) + '...'
+              : props.description}
+          </p>
+          <div className="card-actions justify-between">
+            <div>
+              <div className="badge badge-accent">${props.price}</div>
+            </div>
+            <div>
+              {props.categories.map((category) => (
+                <div key={category.id} className="badge badge-outline">
+                  {category.name}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
