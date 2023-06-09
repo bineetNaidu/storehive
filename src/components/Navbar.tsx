@@ -2,10 +2,39 @@ import Link from 'next/link';
 import { FC } from 'react';
 import { Button } from './Button';
 import { NavAuthCtx } from './NavAuthCtx';
+import type { Category, Product } from '@prisma/client';
 
 type Props = {};
 
-export const Navbar: FC<Props> = () => {
+type Result = {
+  count: number;
+  result: (Category & {
+    products: (
+      | Product
+      | (Product & {
+          categories: {
+            id: number;
+            name: string;
+          }[];
+        })
+    )[];
+  })[];
+};
+
+const fetchCategories = async () => {
+  const res = await fetch('http://localhost:3000/api/categories?limit=8');
+  if (!res.ok) {
+    return [];
+  }
+
+  const data: Result = await res.json();
+
+  return data.result;
+};
+
+export const Navbar: FC<Props> = async () => {
+  const categories = await fetchCategories();
+
   return (
     <nav className="navbar flex justify-between py-3">
       <div className="navbar-start">
@@ -28,20 +57,19 @@ export const Navbar: FC<Props> = () => {
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-brand-secondary text-brand-primary"
+            className="menu menu-sm dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-brand-secondary text-brand-primary z-50"
           >
             <li>
               <Link href="/new-arrivals">New Arrivals</Link>
             </li>
             <li>
-              <Link href="/categories">Category</Link>
+              <span>Shop By Category</span>
               <ul className="p-2">
-                <li>
-                  <Link href="/categories/electronics">Electronics</Link>
-                </li>
-                <li>
-                  <Link href="/categories/fashion">Fashion</Link>
-                </li>
+                {categories.map((c) => (
+                  <li key={c.id}>
+                    <Link href={`/categories/${c.id}`}>{c.name}</Link>
+                  </li>
+                ))}
               </ul>
             </li>
             <li>
@@ -65,13 +93,15 @@ export const Navbar: FC<Props> = () => {
               <summary className="text-brand-font-color font-medium bg-transparent hover:bg-[#7e9a7e] hover:text-white">
                 Shop by Category
               </summary>
-              <ul className="p-2 text-white" style={{ background: '#7e9a7e' }}>
-                <li>
-                  <Link href="/categories/electronics">Electronics</Link>
-                </li>
-                <li>
-                  <Link href="/categories/fashion">Fashion</Link>
-                </li>
+              <ul
+                className="p-2 text-white z-50"
+                style={{ background: '#7e9a7e' }}
+              >
+                {categories.map((c) => (
+                  <li key={c.id}>
+                    <Link href={`/categories/${c.id}`}>{c.name}</Link>
+                  </li>
+                ))}
               </ul>
             </details>
           </li>
