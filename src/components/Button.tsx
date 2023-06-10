@@ -3,12 +3,16 @@ import { ButtonHTMLAttributes, FC } from 'react';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   varient?: 'primary' | 'secondary' | 'ghost' | 'outlined';
   size?: 'sm' | 'md' | 'lg';
+  isLoading?: boolean;
 }
 
 export const Button: FC<ButtonProps> = ({
   children,
   varient = 'primary',
   size = 'md',
+  className,
+  isLoading,
+  ...props
 }) => {
   return (
     <button
@@ -26,8 +30,12 @@ export const Button: FC<ButtonProps> = ({
 			${size === 'lg' && 'h-10 py-2 px-4 text-lg'}
 			${size === 'md' && 'h-8 py-2 px-3 text-md'}
 			${size === 'sm' && 'h-6 py-1 px-2 text-sm'}
+			${className}
 			`}
+      {...props}
+      disabled={isLoading}
     >
+      {isLoading && <span className="loading-spinner"></span>}
       {children}
     </button>
   );
