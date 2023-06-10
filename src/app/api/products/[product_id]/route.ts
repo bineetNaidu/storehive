@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, type Prisma, type Product } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET(
-  request: Request,
+  _request: Request,
   {
     params,
   }: {
@@ -10,9 +10,6 @@ export async function GET(
   }
 ) {
   const { product_id } = params;
-
-  const { searchParams } = new URL(request.url);
-  const reviewsLimit = searchParams.get('reviewsLimit');
 
   const prisma = new PrismaClient();
 
@@ -28,18 +25,6 @@ export async function GET(
           name: true,
         },
       },
-      reviews: {
-        take: reviewsLimit ? parseInt(reviewsLimit) : undefined,
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-            },
-          },
-        },
-      },
     },
   });
 
@@ -49,3 +34,15 @@ export async function GET(
     result: product,
   });
 }
+
+export type GetProductByIdResponse = {
+  result:
+    | (Product & {
+        _count: Prisma.ProductCountOutputType;
+        categories: {
+          id: number;
+          name: string;
+        }[];
+      })
+    | null;
+};
