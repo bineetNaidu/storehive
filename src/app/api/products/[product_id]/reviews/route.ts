@@ -87,7 +87,7 @@ export async function POST(
   if (!validationResult.success) {
     return NextResponse.json(
       {
-        error: validationResult.error.flatten(),
+        errors: validationResult.error.flatten().fieldErrors,
       },
       { status: 400 }
     );
@@ -139,5 +139,8 @@ export type CreateReviewByProductIdResponse = {
       name: string | null;
     };
   };
-  error?: string;
+  errors?: {
+    rating?: string[] | undefined;
+    comment?: string[] | undefined;
+  };
 };

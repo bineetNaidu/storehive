@@ -44,8 +44,10 @@ export const POST = async (req: Request) => {
   if (existingUser)
     return NextResponse.json(
       {
-        error: {
-          email: 'This email is already in use. Please use a different email.',
+        errors: {
+          email: [
+            'This email is already in use. Please use a different email.',
+          ],
         },
       },
       { status: 400 }
