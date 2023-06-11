@@ -57,7 +57,7 @@ export const Navbar: FC<Props> = async () => {
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 p-2 shadow rounded-box w-52 bg-brand-secondary text-brand-primary z-50"
+            className="menu menu-sm dropdown-content mt-3 p-2 shadow rounded-box min-w-fit bg-brand-secondary text-brand-primary z-50"
           >
             <li>
               <Link href="/new-arrivals">New Arrivals</Link>

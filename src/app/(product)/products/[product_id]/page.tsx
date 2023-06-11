@@ -2,7 +2,6 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 import { ProductCtx } from './ProductCtx';
 import type { GetProductByIdResponse } from '@/app/api/products/[product_id]/route';
-import type { GetReviewsByProductIdResponse } from '@/app/api/products/[product_id]/reviews/route';
 import { ProductReviews } from './ProductReviews';
 
 type NextPageProps = {
@@ -39,6 +38,8 @@ const ProductPage: NextPage<NextPageProps> = async ({
             alt={product.name}
             width={500}
             height={500}
+            className="h-[500px] w-[500px]"
+            priority
           />
         </article>
         <article className="text-brand-font-color pt-10 md:pt-0">

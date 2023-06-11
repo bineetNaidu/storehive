@@ -7,7 +7,11 @@ import { useSession } from 'next-auth/react';
 import { FC, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 
-export const ReviewForm: FC<{ product_id: string }> = ({ product_id }) => {
+type Props = {
+  product_id: string;
+};
+
+export const ReviewForm: FC<Props> = ({ product_id }) => {
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -26,11 +30,13 @@ export const ReviewForm: FC<{ product_id: string }> = ({ product_id }) => {
       if (rating === 0) {
         toast.error('Please select a rating');
         setError((e) => ({ ...e, rating: 'Please select a rating' }));
+        setIsLoading(false);
       }
 
       if (comment.trim() === '') {
         toast.error('Please write a comment');
         setError((e) => ({ ...e, comment: 'Please write a comment' }));
+        setIsLoading(false);
       }
 
       const res = await fetch(`/api/products/${product_id}/reviews`, {
@@ -61,7 +67,7 @@ export const ReviewForm: FC<{ product_id: string }> = ({ product_id }) => {
     [rating, comment, product_id]
   );
 
-  if (!session) {
+  if (session.status === 'unauthenticated') {
     return null;
   }
 

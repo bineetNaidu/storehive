@@ -67,7 +67,7 @@ export default async function Home() {
         <div className="divider m-10">
           <h1 className="text-2xl font-bold">Top Deals</h1>
         </div>
-        <div className="flex flex-col items-center  md:flex-row md:space-x-6 space-y-6 md:space-y-0">
+        <div className="flex flex-col items-center md:flex-row space-y-6 flex-wrap">
           {topDeals.map((product) => (
             <div key={product.id} className="mx-auto">
               <ProductCard
@@ -93,7 +93,7 @@ export default async function Home() {
         <div className="divider m-10">
           <h1 className="text-2xl font-bold">Top products</h1>
         </div>
-        <div className="flex flex-col items-center  md:flex-row md:space-x-6 space-y-6 md:space-y-0">
+        <div className="flex flex-col items-center md:flex-row space-y-6 flex-wrap">
           {topProducts.map((product) => (
             <div key={product.id} className="mx-auto">
               <ProductCard

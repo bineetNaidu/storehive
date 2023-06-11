@@ -9,7 +9,12 @@ type Props = {
 
 const fetchReviews = async (product_id: string) => {
   const res = await fetch(
-    `http://localhost:3000/api/products/${product_id}/reviews?limit=5`
+    `http://localhost:3000/api/products/${product_id}/reviews?limit=20`,
+    {
+      next: {
+        revalidate: 5,
+      },
+    }
   );
   const data: GetReviewsByProductIdResponse = await res.json();
   return data.result;
