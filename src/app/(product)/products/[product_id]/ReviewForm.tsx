@@ -31,12 +31,14 @@ export const ReviewForm: FC<Props> = ({ product_id }) => {
         toast.error('Please select a rating');
         setError((e) => ({ ...e, rating: 'Please select a rating' }));
         setIsLoading(false);
+        return;
       }
 
       if (comment.trim() === '') {
         toast.error('Please write a comment');
         setError((e) => ({ ...e, comment: 'Please write a comment' }));
         setIsLoading(false);
+        return;
       }
 
       const res = await fetch(`/api/products/${product_id}/reviews`, {
@@ -48,7 +50,7 @@ export const ReviewForm: FC<Props> = ({ product_id }) => {
       });
       const data: CreateReviewByProductIdResponse = await res.json();
 
-      if (!data.error) {
+      if (!data.errors) {
         toast.success('Review submitted successfully');
         setRating(1);
         setComment('');
@@ -59,6 +61,10 @@ export const ReviewForm: FC<Props> = ({ product_id }) => {
         });
         setIsLoading(false);
       } else {
+        setError({
+          rating: data.errors.rating?.join(', ') ?? '',
+          comment: data.errors.comment?.join(', ') ?? '',
+        });
         toast.error('Something went wrong while submitting the review');
       }
 

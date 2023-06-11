@@ -2,6 +2,7 @@ import type { GetReviewsByProductIdResponse } from '@/app/api/products/[product_
 import Image from 'next/image';
 import { FC } from 'react';
 import { ReviewForm } from './ReviewForm';
+import { ReviewCtx } from './ReviewCtx';
 
 type Props = {
   product_id: string;
@@ -12,7 +13,7 @@ const fetchReviews = async (product_id: string) => {
     `http://localhost:3000/api/products/${product_id}/reviews?limit=20`,
     {
       next: {
-        revalidate: 5,
+        revalidate: 2,
       },
     }
   );
@@ -42,7 +43,7 @@ export const ProductReviews: FC<Props> = async ({ product_id }) => {
               height={48}
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mr-2">
             <p className="text-sm font-bold">{review.user.name || 'User'}</p>
             <div className="rating rating-sm">
               <input
@@ -80,6 +81,11 @@ export const ProductReviews: FC<Props> = async ({ product_id }) => {
               {review.comment}
             </p>
           </div>
+          <ReviewCtx
+            createdUserId={review.userId}
+            productId={product_id}
+            reviewId={review.id}
+          />
         </div>
       ))}
     </div>
