@@ -78,13 +78,16 @@ export const AuthForm: FC = () => {
         </form>
         <div className="divider">otherwise</div>
         <div className="flex justify-center gap-2">
-          <Button varient="outlined">
+          <Button
+            varient="outlined"
+            onClick={() => signIn('google', { callbackUrl: '/' })}
+          >
             <FaGoogle />
           </Button>
-          <Button varient="outlined">
+          <Button varient="outlined" disabled>
             <FaTwitter />
           </Button>
-          <Button varient="outlined">
+          <Button varient="outlined" disabled>
             <FaGithub />
           </Button>
         </div>
