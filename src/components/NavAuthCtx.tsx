@@ -2,20 +2,38 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, useState, useCallback } from 'react';
 import { Button } from './Button';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { useSession, signOut } from 'next-auth/react';
+import { CartModal } from './CartModal';
+import { useCartStore } from '@/lib/cart.store';
 
 export const NavAuthCtx: FC = () => {
   const { status, data: session } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const cart = useCartStore((state) => state.cart);
+
+  const toggle = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
 
   if (status === 'authenticated' && session) {
     return (
       <div className="flex items-center justify-center gap-2">
-        <button className="btn btn-square btn-ghost text-brand-font-color ">
-          <AiOutlineShoppingCart className="text-2xl" />
+        <button
+          className="btn btn-square min-w-fit btn-ghost text-brand-font-color"
+          onClick={toggle}
+        >
+          <div className="indicator">
+            {cart.length > 0 && (
+              <span className="indicator-item badge badge-xs badge-info"></span>
+            )}
+            <AiOutlineShoppingCart className="text-2xl" />
+          </div>
         </button>
+        <CartModal isOpen={isOpen} toggle={toggle} />
         <div className="dropdown dropdown-end">
           <button>
             <div className="avatar">

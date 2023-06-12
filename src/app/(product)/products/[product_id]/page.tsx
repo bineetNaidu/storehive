@@ -103,7 +103,7 @@ const ProductPage: NextPage<NextPageProps> = async ({
             </p>
           </div>
 
-          <ProductCtx />
+          <ProductCtx product={product} />
 
           <div className="my-12 px-10 md:px-0">
             <div className="w-96 border border-gray-200 rounded-md p-4">
