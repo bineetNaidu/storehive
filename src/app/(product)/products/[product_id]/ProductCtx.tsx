@@ -1,24 +1,36 @@
 'use client';
 
+import { GetProductByIdResponse } from '@/app/api/products/[product_id]/route';
 import { Button } from '@/components/Button';
-import { FC, useState, useMemo } from 'react';
+import { useCartStore } from '@/lib/cart.store';
+import { FC, useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
 
-export const ProductCtx: FC = () => {
+type Props = {
+  product: NonNullable<GetProductByIdResponse['result']>;
+};
+
+export const ProductCtx: FC<Props> = ({ product }) => {
   const inStock = 12;
 
   const [selectedColor, setSelectedColor] = useState('red');
   const [quantity, setQuantity] = useState(1);
 
-  const increment = useMemo(
-    () => () => quantity < inStock && setQuantity((q) => q + 1),
-    [quantity]
+  const increment = useCallback(
+    () => quantity < inStock && setQuantity((q) => q + 1),
+    [quantity, inStock]
   );
-  const decrement = useMemo(
-    () => () => quantity > 1 && setQuantity((q) => q - 1),
+  const decrement = useCallback(
+    () => quantity > 1 && setQuantity((q) => q - 1),
     [quantity]
   );
 
-  const [selectedSize, setSelectedSize] = useState('sm');
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const handleAddToCart = useCallback(() => {
+    addToCart(product, quantity);
+    toast.success('Product added to cart');
+  }, [addToCart, product, quantity]);
 
   return (
     <div className="px-10 md:px-0">
@@ -83,7 +95,12 @@ export const ProductCtx: FC = () => {
         <Button size="lg" className="rounded-xl">
           Buy it
         </Button>
-        <Button size="lg" varient="outlined" className="ml-4 rounded-xl">
+        <Button
+          size="lg"
+          varient="outlined"
+          className="ml-4 rounded-xl"
+          onClick={handleAddToCart}
+        >
           Add to cart
         </Button>
       </div>
