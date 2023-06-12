@@ -1,11 +1,13 @@
 import type { AuthOptions } from 'next-auth';
 import type { Adapter } from 'next-auth/adapters';
 import * as argon2 from 'argon2';
-import { z } from 'zod';
+import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { z } from 'zod';
 import { randomBytes, randomUUID } from 'crypto';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { PrismaClient, User } from '@prisma/client';
+import { configuration } from './configuration';
 
 const prisma = new PrismaClient();
 const prismaAdapter = PrismaAdapter(prisma) as Adapter<PrismaClient>;
@@ -19,6 +21,10 @@ export const authOptions: AuthOptions = {
   adapter: prismaAdapter,
   // Configure one or more authentication providers
   providers: [
+    GoogleProvider({
+      clientId: configuration.google.clientId,
+      clientSecret: configuration.google.clientSecret,
+    }),
     CredentialsProvider({
       id: 'credentials',
       type: 'credentials',
