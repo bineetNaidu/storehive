@@ -33,7 +33,7 @@ export const Button: FC<ButtonProps> = ({
 			${className}
 			`}
       {...props}
-      disabled={isLoading}
+      disabled={isLoading || props.disabled}
     >
       {isLoading && <span className="loading-spinner"></span>}
       {children}
