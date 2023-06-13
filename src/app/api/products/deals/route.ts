@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, type Product } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -30,3 +30,13 @@ export async function GET(request: Request) {
     result: products,
   });
 }
+
+export type GetDealsResponse = {
+  count: number;
+  result: (Product & {
+    categories: {
+      name: string;
+      id: number;
+    }[];
+  })[];
+};
