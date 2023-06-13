@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/lib/auth-options';
+import { authOptions } from '@/lib/auth-options';
 import { PrismaClient, type Review } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
