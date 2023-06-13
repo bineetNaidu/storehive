@@ -105,25 +105,32 @@ enum Size {
   XXXL
 }
 
+enum VariationType {
+  COLOR
+  SIZE
+}
+
 model Variation {
-  id        Int      @id @default(autoincrement())
-  name      String
-  productId Int      @map("product_id")
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id        Int           @id @default(autoincrement())
+  type      VariationType @default(COLOR)
+  productId Int           @map("product_id")
+  product   Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
   options   Option[]
 
-  @@unique([name, productId]) // product can only have one variation with the same name
+  @@unique([type, productId]) // product can only have one variation with the same type
   @@map("variations")
 }
 
 model Option {
   id          Int       @id @default(autoincrement())
-  name        String?
+  name        String
+  hex         String?
   size        Size?
   variationId Int       @map("variation_id")
   variation   Variation @relation(fields: [variationId], references: [id], onDelete: Cascade)
 
-  @@unique([name, variationId]) // variation can only have one option with the same name
+  @@unique([hex, variationId]) // variation can only have one option with the same hex
+  @@unique([size, variationId]) // variation can only have one option with the same size
   @@map("options")
 }
 

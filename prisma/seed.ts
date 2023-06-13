@@ -1,4 +1,4 @@
-import { PrismaClient, Size } from '@prisma/client';
+import { PrismaClient, type Size, type VariationType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -27,14 +27,16 @@ const categoriesData = [
         isFeatured: true,
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
               {
                 name: 'black',
+                hex: '#000000',
                 size: undefined,
               },
               {
                 name: 'white',
+                hex: '#ffffff',
                 size: undefined,
               },
             ],
@@ -64,14 +66,16 @@ const categoriesData = [
         },
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
               {
                 name: 'red',
+                hex: '#ff0000',
                 size: undefined,
               },
               {
                 name: 'green',
+                hex: '#00ff00',
                 size: undefined,
               },
             ],
@@ -104,14 +108,16 @@ const categoriesData = [
         },
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
               {
                 name: 'black',
+                hex: '#000000',
                 size: undefined,
               },
               {
                 name: 'gray',
+                hex: '#808080',
                 size: undefined,
               },
             ],
@@ -141,14 +147,16 @@ const categoriesData = [
         },
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
               {
                 name: 'black',
+                hex: '#000000',
                 size: undefined,
               },
               {
                 name: 'white',
+                hex: '#ffffff',
                 size: undefined,
               },
             ],
@@ -176,42 +184,47 @@ const categoriesData = [
         isFeatured: false,
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
               {
                 name: 'black',
+                hex: '#000000',
                 size: undefined,
               },
               {
                 name: 'purple',
+                hex: '#800080',
                 size: undefined,
               },
             ],
           },
           {
-            name: 'size',
+            type: 'SIZE',
             options: [
               {
                 size: 'S',
-                name: undefined,
+                name: 'small',
+                hex: undefined,
               },
               {
                 size: 'M',
-                name: undefined,
+                name: 'medium',
+                hex: undefined,
               },
               {
                 size: 'L',
-                name: undefined,
+                name: 'large',
+                hex: undefined,
               },
               {
                 size: 'XL',
-                name: undefined,
+                name: 'extra large',
+                hex: undefined,
               },
             ],
           },
         ],
       },
-
       {
         name: 'Jeans',
         description: 'Classic denim jeans for everyday wear.',
@@ -228,32 +241,37 @@ const categoriesData = [
         isFeatured: true,
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
               {
                 name: 'blue',
+                hex: '#0000ff',
                 size: undefined,
               },
             ],
           },
           {
-            name: 'size',
+            type: 'SIZE',
             options: [
               {
                 size: 'S',
-                name: undefined,
+                name: 'small',
+                hex: undefined,
               },
               {
                 size: 'M',
-                name: undefined,
+                name: 'medium',
+                hex: undefined,
               },
               {
                 size: 'L',
-                name: undefined,
+                name: 'large',
+                hex: undefined,
               },
               {
                 size: 'XL',
-                name: undefined,
+                name: 'extra large',
+                hex: undefined,
               },
             ],
           },
@@ -274,15 +292,17 @@ const categoriesData = [
         },
         variations: [
           {
-            name: 'size',
+            type: 'SIZE',
             options: [
               {
                 size: 'S',
-                name: undefined,
+                name: 'Small',
+                hex: undefined,
               },
               {
                 size: 'M',
-                name: undefined,
+                name: 'Medium',
+                hex: undefined,
               },
             ],
           },
@@ -305,20 +325,22 @@ const categoriesData = [
         isFeatured: false,
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
               {
                 name: 'yellow',
+                hex: '#ffff00',
                 size: undefined,
               },
             ],
           },
           {
-            name: 'size',
+            type: 'SIZE',
             options: [
               {
-                name: undefined,
+                name: 'small',
                 size: 'S',
+                hex: undefined,
               },
             ],
           },
@@ -341,11 +363,12 @@ const categoriesData = [
         isFeatured: false,
         variations: [
           {
-            name: 'size',
+            type: 'SIZE',
             options: [
               {
-                name: undefined,
+                name: 'small',
                 size: 'S',
+                hex: undefined,
               },
             ],
           },
@@ -499,11 +522,23 @@ const categoriesData = [
         },
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
-              { name: 'purple', size: undefined },
-              { name: 'blue', size: undefined },
-              { name: 'pink', size: undefined },
+              {
+                name: 'purple',
+                hex: '#9b59b6',
+                size: undefined,
+              },
+              {
+                name: 'blue',
+                hex: '#3498db',
+                size: undefined,
+              },
+              {
+                name: 'pink',
+                hex: '#e91e63',
+                size: undefined,
+              },
             ],
           },
         ],
@@ -582,11 +617,23 @@ const categoriesData = [
         },
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
-              { name: 'white', size: undefined },
-              { name: 'black', size: undefined },
-              { name: 'pink', size: undefined },
+              {
+                name: 'white',
+                hex: '#ffffff',
+                size: undefined,
+              },
+              {
+                name: 'black',
+                hex: '#000000',
+                size: undefined,
+              },
+              {
+                name: 'pink',
+                hex: '#ff69b4',
+                size: undefined,
+              },
             ],
           },
         ],
@@ -608,11 +655,23 @@ const categoriesData = [
         },
         variations: [
           {
-            name: 'color',
+            type: 'COLOR',
             options: [
-              { name: 'black', size: undefined },
-              { name: 'white', size: undefined },
-              { name: 'pink', size: undefined },
+              {
+                name: 'black',
+                hex: '#000000',
+                size: undefined,
+              },
+              {
+                name: 'white',
+                size: undefined,
+                hex: '#ffffff',
+              },
+              {
+                name: 'pink',
+                hex: '#ff69b4',
+                size: undefined,
+              },
             ],
           },
         ],
@@ -721,6 +780,8 @@ const categoriesData = [
 ];
 
 async function seed() {
+  console.log(`Start seeding ...`);
+
   for (const categoryData of categoriesData) {
     const c = await prisma.category.create({
       data: {
@@ -752,11 +813,13 @@ async function seed() {
         for (const variationData of variations) {
           const v = await prisma.variation.create({
             data: {
-              name: variationData.name,
+              type: variationData.type as VariationType,
+
               options: {
                 createMany: {
                   data: variationData.options.map((option) => ({
                     name: option.name,
+                    hex: option.hex,
                     size: option.size as Size,
                   })),
                 },
