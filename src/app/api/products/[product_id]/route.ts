@@ -1,4 +1,10 @@
-import { PrismaClient, type Prisma, type Product } from '@prisma/client';
+import {
+  PrismaClient,
+  type Prisma,
+  type Product,
+  type Variation,
+  type Option,
+} from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -18,6 +24,14 @@ export async function GET(
       id: parseInt(product_id),
     },
     include: {
+      variations: {
+        select: {
+          id: true,
+          type: true,
+          productId: true,
+          options: true,
+        },
+      },
       _count: true,
       categories: {
         select: {
@@ -43,6 +57,9 @@ export type GetProductByIdResponse = {
           id: number;
           name: string;
         }[];
+        variations: (Pick<Variation, 'id' | 'type' | 'productId'> & {
+          options: Option[];
+        })[];
       })
     | null;
 };
