@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ProductCtx } from './ProductCtx';
 import type { GetProductByIdResponse } from '@/app/api/products/[product_id]/route';
 import { ProductReviews } from './ProductReviews';
+import Link from 'next/link';
 
 type NextPageProps = {
   params: {
@@ -31,6 +32,23 @@ const ProductPage: NextPage<NextPageProps> = async ({
 
   return (
     <main className="container">
+      <div className="text-sm breadcrumbs px-4">
+        <ul>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <a>category</a>
+          </li>
+          {product.categories.map((category) => (
+            <li key={category.id} className="text-brand-font-color">
+              <Link href={`/categories/${category.id}`} prefetch={false}>
+                {category.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="md:grid md:grid-cols-2 md:gap-4 p-4 flex flex-col">
         <article className="flex flex-col items-center">
           <Image
@@ -125,6 +143,41 @@ const ProductPage: NextPage<NextPageProps> = async ({
               </p>
             </div>
           </div>
+
+          {product.metadata && (
+            <div className="my-12 px-10 md:px-0">
+              <h2 className="text-brand-font-color text-md font-medium mb-1">
+                Product Details
+              </h2>
+              <div className="gap-6 columns-2">
+                {Object.entries(product.metadata).map(([key, value]) => (
+                  <div
+                    tabIndex={0}
+                    className="collapse bg-white rounded-md my-2 text-brand-font-color collapse-plus"
+                    key={`${key}-${value}`}
+                  >
+                    <div className="collapse-title text-xl font-medium">
+                      {key}
+                    </div>
+                    <div className="collapse-content">
+                      <p>
+                        {Array.isArray(value)
+                          ? value.map((v) => (
+                              <span
+                                className="badge badge-outline mx-1"
+                                key={v}
+                              >
+                                {v}
+                              </span>
+                            ))
+                          : value}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <ProductReviews product_id={product_id} />
         </article>

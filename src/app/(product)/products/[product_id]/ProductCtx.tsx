@@ -3,22 +3,23 @@
 import { GetProductByIdResponse } from '@/app/api/products/[product_id]/route';
 import { Button } from '@/components/Button';
 import { useCartStore } from '@/lib/cart.store';
+import { type Size } from '@prisma/client';
 import { FC, useState, useCallback } from 'react';
-import { toast } from 'react-toastify';
+import chroma from 'chroma-js';
 
 type Props = {
   product: NonNullable<GetProductByIdResponse['result']>;
 };
 
 export const ProductCtx: FC<Props> = ({ product }) => {
-  const inStock = 12;
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<Size | null>(null);
 
-  const [selectedColor, setSelectedColor] = useState('red');
   const [quantity, setQuantity] = useState(1);
 
   const increment = useCallback(
-    () => quantity < inStock && setQuantity((q) => q + 1),
-    [quantity, inStock]
+    () => quantity < product.stockCount && setQuantity((q) => q + 1),
+    [quantity, product.stockCount]
   );
   const decrement = useCallback(
     () => quantity > 1 && setQuantity((q) => q - 1),
@@ -29,38 +30,75 @@ export const ProductCtx: FC<Props> = ({ product }) => {
 
   const handleAddToCart = useCallback(() => {
     addToCart(product, quantity);
-    toast.success('Product added to cart');
   }, [addToCart, product, quantity]);
 
   return (
     <div className="px-10 md:px-0">
-      <div>
-        <h2 className="text-xl font-bold mb-1">Choose the Color</h2>
-        <div className="flex">
-          {['red', 'blue', 'green'].map((color) => (
-            <button
-              key={color}
-              onClick={() => setSelectedColor(color)}
-              className={`w-8 h-8 rounded-full border-2 mr-2 hover:ring-2 ring-offset-2 ring-offset-white focus:outline-none
-									ring-slate-600 ring-opacity-50
-									transform hover:scale-110 transition duration-300 ease-in-out
+      {product.variations.map((variation) =>
+        variation.type === 'COLOR' ? (
+          <div key={variation.id} className="mb-5">
+            <h2 className="text-xl font-bold mb-1">Choose the Color</h2>
+            <div className="flex gap-4">
+              {variation.options.map((color) => (
+                <div
+                  key={color.id}
+                  className="tooltip tooltip-bottom"
+                  data-tip={color.name}
+                >
+                  <button
+                    onClick={() => setSelectedColor(color.name!)}
+                    className={`w-8 h-8 rounded-full border-2 mr-2 hover:ring-2 ring-offset-2 ring-offset-white focus:outline-none
+										ring-slate-600 ring-opacity-50
+										transform hover:scale-110 transition duration-300 ease-in-out
 									${
-                    selectedColor === color
+                    selectedColor === color.name
                       ? 'ring-2 ring-offset-2 ring-offset-white ring-slate-600 ring-opacity-50'
                       : ''
-                  }
-									${
-                    color === 'red'
-                      ? 'bg-gradient-to-b from-red-500 to-red-300'
-                      : color === 'blue'
-                      ? 'bg-gradient-to-b from-blue-500 to-blue-300'
-                      : 'bg-gradient-to-b from-green-500 to-green-300'
-                  }
+                  }`}
+                    style={{
+                      background: `radial-gradient(circle, ${chroma(color.hex!)
+                        .darken()
+                        .hex()} 0%, ${chroma(color.hex!)
+                        .brighten(2)
+                        .hex()} 100%)`,
+                    }}
+                  ></button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          variation.type === 'SIZE' && (
+            <div key={variation.id}>
+              <h2 className="text-xl font-bold mb-1">Choose the Size</h2>
+              <div className="flex gap-4">
+                {variation.options.map((opt) => (
+                  <div
+                    key={opt.id}
+                    className="tooltip tooltip-bottom"
+                    data-tip={opt.name}
+                  >
+                    <button
+                      className={`w-8 h-8 rounded-full border-2 mr-2 hover:ring-2 ring-offset-2 ring-offset-white focus:outline-none
+										ring-slate-600 ring-opacity-50
+										transform hover:scale-110 transition duration-300 ease-in-out
+										${
+                      selectedSize === opt.size
+                        ? 'ring-2 ring-offset-2 ring-offset-white ring-slate-600 ring-opacity-50'
+                        : ''
+                    }
 									`}
-            ></button>
-          ))}
-        </div>
-      </div>
+                      onClick={() => setSelectedSize(opt.size!)}
+                    >
+                      {opt.size!}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        )
+      )}
 
       <div className="divider"></div>
 
@@ -79,11 +117,13 @@ export const ProductCtx: FC<Props> = ({ product }) => {
           </div>
         </div>
 
-        {inStock < 20 && (
+        {product.stockCount < 20 && (
           <div className="text-xs ml-4">
             <p>
               Only{' '}
-              <span className="text-green-500 font-bold">{inStock} items</span>{' '}
+              <span className="text-green-500 font-bold">
+                {product.stockCount} items
+              </span>{' '}
               left
             </p>
             <p>Dont miss it!</p>
