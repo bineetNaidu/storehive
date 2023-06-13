@@ -1,75 +1,158 @@
-import { type Product, type OrderItem } from '@prisma/client';
+import { type Product } from '@prisma/client';
 import { create } from 'zustand';
 
+type CartItem = {
+  quantity: number;
+  product: Product;
+};
 interface CartStore {
-  cart: {
-    quantity: number;
-    product: Product;
-  }[];
+  cart: CartItem[];
   totalPrice: number;
   totalItems: number;
 
   addToCart: (product: Product, quantity: number) => void;
-  removeFromCart: (productId: number) => void;
-  emtpyCart: () => void;
+  removeFromCart: (productId: number, quantity?: number) => void;
+  increaseQuantity: (productId: number) => void;
+  decreaseQuantity: (productId: number) => void;
+  emptyCart: () => void;
 }
 
-export const useCartStore = create<CartStore>()((set) => ({
+export const useCartStore = create<CartStore>((set) => ({
   cart: [],
   totalPrice: 0,
   totalItems: 0,
 
   addToCart: (product, quantity) => {
-    set((state) => {
-      const existingProduct = state.cart.find(
-        (item) => item.product.id === product.id
-      );
-
-      if (existingProduct) {
-        existingProduct.quantity += quantity;
-      } else {
-        state.cart.push({
-          product,
-          quantity,
-        });
+    return set((state) => {
+      const item = state.cart.find((item) => item.product.id === product.id);
+      if (item) {
+        return {
+          cart: state.cart.map((item) => {
+            if (item.product.id === product.id) {
+              return {
+                ...item,
+                quantity: item.quantity + quantity,
+              };
+            }
+            return item;
+          }),
+          totalPrice: state.totalPrice + product.price * quantity,
+          totalItems: state.totalItems + quantity,
+        };
       }
 
-      state.totalItems += quantity;
-      state.totalPrice += product.price * quantity;
-
-      return state;
+      return {
+        cart: [
+          ...state.cart,
+          {
+            quantity,
+            product,
+          },
+        ],
+        totalPrice: state.totalPrice + product.price * quantity,
+        totalItems: state.totalItems + quantity,
+      };
     });
   },
-
-  removeFromCart: (productId) => {
-    set((state) => {
-      const existingProduct = state.cart.find(
-        (item) => item.product.id === productId
-      );
-
-      if (existingProduct) {
-        if (existingProduct.quantity === 1) {
-          state.cart = state.cart.filter(
-            (item) => item.product.id !== productId
-          );
+  removeFromCart: (productId, quantity) => {
+    return set((state) => {
+      const item = state.cart.find((item) => item.product.id === productId);
+      if (item) {
+        if (item.quantity > 1 && quantity) {
+          return {
+            cart: state.cart.map((item) => {
+              if (item.product.id === productId) {
+                return {
+                  ...item,
+                  quantity: item.quantity - quantity,
+                };
+              }
+              return item;
+            }),
+            totalPrice: state.totalPrice - item.product.price * quantity,
+            totalItems: state.totalItems - quantity,
+          };
         } else {
-          existingProduct.quantity -= 1;
+          return {
+            cart: state.cart.filter((item) => item.product.id !== productId),
+            totalPrice: state.totalPrice - item.product.price * item.quantity,
+            totalItems: state.totalItems - item.quantity,
+          };
         }
-
-        state.totalItems -= 1;
-        state.totalPrice -= existingProduct.product.price;
       }
 
-      return state;
+      return {
+        cart: state.cart,
+        totalPrice: state.totalPrice,
+        totalItems: state.totalItems,
+      };
     });
   },
 
-  emtpyCart: () => {
-    set((state) => {
-      state.cart = [];
-      state.totalPrice = 0;
-      state.totalItems = 0;
-      return state;
+  emptyCart: () =>
+    set((state) => ({
+      cart: [],
+      totalPrice: 0,
+      totalItems: 0,
+    })),
+
+  increaseQuantity: (productId) => {
+    return set((state) => {
+      const item = state.cart.find((item) => item.product.id === productId);
+      if (item) {
+        return {
+          cart: state.cart.map((item) => {
+            if (item.product.id === productId) {
+              return {
+                ...item,
+                quantity: item.quantity + 1,
+              };
+            }
+            return item;
+          }),
+          totalPrice: state.totalPrice + item.product.price,
+          totalItems: state.totalItems + 1,
+        };
+      }
+      return {
+        cart: state.cart,
+        totalPrice: state.totalPrice,
+        totalItems: state.totalItems,
+      };
+    });
+  },
+
+  decreaseQuantity: (productId) => {
+    return set((state) => {
+      const item = state.cart.find((item) => item.product.id === productId);
+      if (item) {
+        if (item.quantity > 1) {
+          return {
+            cart: state.cart.map((item) => {
+              if (item.product.id === productId) {
+                return {
+                  ...item,
+                  quantity: item.quantity - 1,
+                };
+              }
+              return item;
+            }),
+            totalPrice: state.totalPrice - item.product.price,
+            totalItems: state.totalItems - 1,
+          };
+        } else {
+          return {
+            cart: state.cart.filter((item) => item.product.id !== productId),
+            totalPrice: state.totalPrice - item.product.price * item.quantity,
+            totalItems: state.totalItems - item.quantity,
+          };
+        }
+      }
+      return {
+        cart: state.cart,
+        totalPrice: state.totalPrice,
+        totalItems: state.totalItems,
+      };
     });
   },
 }));
