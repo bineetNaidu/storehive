@@ -1,7 +1,8 @@
+import Image from 'next/image';
+import { FaTrash } from 'react-icons/fa';
 import { FC } from 'react';
 import { Button } from './Button';
 import { useCartStore } from '@/lib/cart.store';
-import Image from 'next/image';
 
 type Props = {
   isOpen: boolean;
@@ -9,8 +10,15 @@ type Props = {
 };
 
 export const CartModal: FC<Props> = ({ isOpen, toggle }) => {
-  const { cart, emtpyCart, removeFromCart, totalItems, totalPrice } =
-    useCartStore();
+  const {
+    cart,
+    emptyCart,
+    removeFromCart,
+    totalItems,
+    totalPrice,
+    decreaseQuantity,
+    increaseQuantity,
+  } = useCartStore();
 
   return (
     <div
@@ -18,7 +26,13 @@ export const CartModal: FC<Props> = ({ isOpen, toggle }) => {
 			${isOpen && 'modal-open'}`}
     >
       <div className="modal-box bg-brand-secondary text-white">
-        <h3 className="font-bold text-lg">Your Cart!</h3>
+        <div className="flex justify-between">
+          <h3 className="font-bold text-lg">Your Cart!</h3>
+          <Button size="sm" onClick={toggle} aria-label="Close!">
+            <span aria-hidden="true">&times;</span>
+          </Button>
+        </div>
+        <div className="divider"></div>
         <div className="flex flex-col ml-2 gap-2">
           {cart.map((item) => (
             <div key={item.product.id} className="flex gap-2 items-center">
@@ -34,17 +48,33 @@ export const CartModal: FC<Props> = ({ isOpen, toggle }) => {
 
               <div>
                 <h4>{item.product.name}</h4>
-                <p>Quantity: {item.quantity}</p>
+                <p className="flex">
+                  Quantity:
+                  <div className="flex ml-2">
+                    <Button
+                      size="sm"
+                      onClick={() => increaseQuantity(item.product.id)}
+                    >
+                      +
+                    </Button>
+                    <span className="mx-1">{item.quantity}</span>
+                    <Button
+                      size="sm"
+                      onClick={() => decreaseQuantity(item.product.id)}
+                    >
+                      -
+                    </Button>
+                  </div>
+                </p>
                 <p>Price: ${item.product.price}</p>
-              </div>
-
-              <div>
-                <Button
-                  size="sm"
-                  onClick={() => removeFromCart(item.product.id)}
-                >
-                  Remove Item
-                </Button>
+                <div>
+                  <Button
+                    size="sm"
+                    onClick={() => removeFromCart(item.product.id)}
+                  >
+                    <FaTrash /> <span className="ml-1">Remove this item</span>
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -63,26 +93,26 @@ export const CartModal: FC<Props> = ({ isOpen, toggle }) => {
 
           {cart.length > 0 && (
             <>
-              <div className="divider"></div>
-              <div>
-                <p className="text-center">Total: ${totalPrice}</p>
+              <div className="divider mb-1"></div>
+              <div className="flex justify-end">
                 <p className="text-center">Total Items: {totalItems}</p>
+                <div className="divider divider-horizontal p-0 m-0"></div>
+                <p className="text-center">
+                  Total:{' '}
+                  <span className="font-bold">${totalPrice.toFixed(2)}</span>
+                </p>
               </div>
             </>
           )}
         </div>
-        <div className="modal-action">
+        <div className="modal-action items-center">
           {cart.length > 0 && (
-            <Button size="md" onClick={emtpyCart}>
+            <Button size="sm" onClick={emptyCart}>
               Empty Cart
             </Button>
           )}
 
           <Button disabled={totalItems === 0}>Process to Checkout</Button>
-
-          <Button size="md" onClick={toggle}>
-            Close!
-          </Button>
         </div>
       </div>
     </div>
