@@ -79,7 +79,6 @@ model Product {
   price         Float
   image         String
   stockCount    Int      @default(0) @map("stock_count")
-  brand         String
   metadata      Json?
   isFeatured    Boolean  @default(false) @map("is_featured")
   isSoftDeleted Boolean  @default(false) @map("is_soft_deleted")
@@ -109,7 +108,6 @@ enum Size {
 model Variation {
   id        Int      @id @default(autoincrement())
   name      String
-  size      Size?
   productId Int      @map("product_id")
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   options   Option[]
@@ -120,7 +118,8 @@ model Variation {
 
 model Option {
   id          Int       @id @default(autoincrement())
-  name        String
+  name        String?
+  size        Size?
   variationId Int       @map("variation_id")
   variation   Variation @relation(fields: [variationId], references: [id], onDelete: Cascade)
 
