@@ -51,9 +51,7 @@ const CategoryPage: NextPage<{
           category.products.map((product) => (
             <div key={product.id} className="mx-auto">
               <ProductCard
-                createdAt={product.createdAt}
                 price={product.price}
-                updatedAt={product.updatedAt}
                 id={product.id}
                 name={product.name}
                 description={product.description}

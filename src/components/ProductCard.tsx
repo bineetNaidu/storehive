@@ -3,7 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
-type Props = Product & {
+type Props = {
+  id: Product['id'];
+  name: Product['name'];
+  price: Product['price'];
+  image: Product['image'];
+  description: Product['description'];
   isNew?: boolean;
   categories: Category[] | Pick<Category, 'name' | 'id'>[];
 };
@@ -18,7 +23,7 @@ export const ProductCard: FC<Props> = (props) => {
             alt={props.name}
             width={500}
             height={500}
-            className="h-[250px] w-full object-cover group-hover:scale-95 transition-all duration-450 ease-in-out rounded-t-xl"
+            className="h-[250px] w-full aspect-square object-cover group-hover:scale-95 transition-all duration-450 ease-in-out rounded-t-xl"
           />
         </figure>
         <div className="card-body text-brand-font-color">
