@@ -99,7 +99,6 @@ export const authOptions: AuthOptions = {
         token.accessToken = account.access_token;
         token.id = user.id;
         token.email = (user as User).email;
-        console.log({ user });
       }
       return token;
     },
