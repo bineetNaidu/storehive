@@ -49,7 +49,7 @@ export const PersonalDetails: FC<Props> = ({ profile }) => {
         <div className="flex flex-col space-y-1">
           <h2 className="text-sm">Email Verified</h2>
           <p className="text-gray-700 font-medium">
-            {!profile.emailVerified ? (
+            {profile.emailVerified ? (
               <BsCheck2Circle
                 className="inline-block text-green-500"
                 size={20}
