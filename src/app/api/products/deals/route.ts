@@ -1,11 +1,10 @@
-import { PrismaClient, type Product } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
+import type { Product } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = searchParams.get('limit');
-
-  const prisma = new PrismaClient();
 
   const products = await prisma.product.findMany({
     take: limit ? parseInt(limit) : undefined,
@@ -22,8 +21,6 @@ export async function GET(request: Request) {
       categories: { select: { name: true, id: true } },
     },
   });
-
-  await prisma.$disconnect();
 
   return NextResponse.json({
     count: products.length,

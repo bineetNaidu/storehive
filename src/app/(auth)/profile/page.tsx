@@ -1,5 +1,4 @@
 import { Button } from '@/components/Button';
-import { PrismaClient } from '@prisma/client';
 import type { NextPage } from 'next';
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
@@ -7,9 +6,9 @@ import { FaEdit } from 'react-icons/fa';
 import { PersonalDetails } from './PersonalDetails';
 import { AddressBook } from './AddressBook';
 import { DangerZone } from './DangerZone';
+import { prisma } from '@/lib/prisma';
 
 const fetchProfile = async () => {
-  const prisma = new PrismaClient();
   const session = await getServerSession();
 
   if (!session) {
@@ -43,8 +42,6 @@ const fetchProfile = async () => {
       error: 'User not found.',
     };
   }
-
-  await prisma.$disconnect();
 
   return {
     profile: user,

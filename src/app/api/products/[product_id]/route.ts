@@ -1,10 +1,5 @@
-import {
-  PrismaClient,
-  type Prisma,
-  type Product,
-  type Variation,
-  type Option,
-} from '@prisma/client';
+import { prisma } from '@/lib/prisma';
+import type { Prisma, Product, Variation, Option } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -16,8 +11,6 @@ export async function GET(
   }
 ) {
   const { product_id } = params;
-
-  const prisma = new PrismaClient();
 
   const product = await prisma.product.findUnique({
     where: {
@@ -41,8 +34,6 @@ export async function GET(
       },
     },
   });
-
-  await prisma.$disconnect();
 
   return NextResponse.json({
     result: product,

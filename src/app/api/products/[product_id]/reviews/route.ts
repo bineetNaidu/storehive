@@ -1,8 +1,9 @@
 import { authOptions } from '@/lib/auth-options';
-import { PrismaClient, type Review } from '@prisma/client';
+import { type Review } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(
   request: Request,
@@ -12,8 +13,6 @@ export async function GET(
 
   const { searchParams } = new URL(request.url);
   const limit = searchParams.get('limit');
-
-  const prisma = new PrismaClient();
 
   const reviews = await prisma.review.findMany({
     where: {
@@ -30,8 +29,6 @@ export async function GET(
       },
     },
   });
-
-  await prisma.$disconnect();
 
   return NextResponse.json({
     result: reviews,
@@ -93,8 +90,6 @@ export async function POST(
     );
   }
 
-  const prisma = new PrismaClient();
-
   const review = await prisma.review.create({
     data: {
       rating: validationResult.data.rating,
@@ -120,8 +115,6 @@ export async function POST(
       },
     },
   });
-
-  await prisma.$disconnect();
 
   return NextResponse.json(
     {

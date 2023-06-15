@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -6,8 +6,6 @@ export async function GET(request: Request) {
   const limit = searchParams.get('limit');
   const includeProduct = searchParams.get('includeProduct');
   const orderBy = searchParams.get('orderBy') as 'desc' | 'asc';
-
-  const prisma = new PrismaClient();
 
   const categories = await prisma.category.findMany({
     take: limit ? parseInt(limit) : undefined,
@@ -27,8 +25,6 @@ export async function GET(request: Request) {
       },
     },
   });
-
-  await prisma.$disconnect();
 
   return NextResponse.json({
     count: categories.length,

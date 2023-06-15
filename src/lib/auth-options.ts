@@ -8,8 +8,8 @@ import { randomBytes, randomUUID } from 'crypto';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { PrismaClient, User } from '@prisma/client';
 import { configuration } from './configuration';
+import { prisma } from './prisma';
 
-const prisma = new PrismaClient();
 const prismaAdapter = PrismaAdapter(prisma) as Adapter<PrismaClient>;
 
 const loginReqBodySchema = z.object({

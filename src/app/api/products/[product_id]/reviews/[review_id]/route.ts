@@ -1,5 +1,5 @@
 import { authOptions } from '@/lib/auth-options';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
@@ -26,8 +26,6 @@ export async function DELETE(
       { status: 401 }
     );
   }
-
-  const prisma = new PrismaClient();
 
   const review = await prisma.review.findUnique({
     where: {

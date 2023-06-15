@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -13,8 +13,6 @@ export async function GET(
 
   const { searchParams } = new URL(request.url);
   const productsLimit = searchParams.get('productsLimit');
-
-  const prisma = new PrismaClient();
 
   const category = await prisma.category.findUnique({
     where: {
@@ -37,8 +35,6 @@ export async function GET(
       },
     },
   });
-
-  await prisma.$disconnect();
 
   return NextResponse.json({
     result: category,

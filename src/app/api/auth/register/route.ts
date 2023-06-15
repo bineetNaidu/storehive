@@ -1,9 +1,7 @@
 import * as argon2 from 'argon2';
-import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 const registerReqBodySchema = z.object({
   email: z
