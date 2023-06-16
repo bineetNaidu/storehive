@@ -22,7 +22,7 @@ type Result = {
 };
 
 const fetchCategories = async () => {
-  const res = await fetch('http://localhost:3000/api/categories?limit=8');
+  const res = await fetch('http://localhost:3000/api/categories?limit=10');
   if (!res.ok) {
     return [];
   }

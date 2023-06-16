@@ -49,7 +49,7 @@ export const NavAuthCtx: FC = () => {
           </button>
           <ul
             tabIndex={100}
-            className="menu dropdown-content p-2 shadow bg-brand-secondary text-white rounded-box w-52 mt-4"
+            className="menu dropdown-content p-2 shadow bg-brand-secondary text-white rounded-box w-52 mt-4 z-50"
           >
             <li>
               <span className="text-sm font-semibold text-gray-400">
