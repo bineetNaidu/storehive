@@ -1,8 +1,6 @@
-import { Button } from '@/components/Button';
 import type { NextPage } from 'next';
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
-import { FaEdit } from 'react-icons/fa';
 import { PersonalDetails } from './PersonalDetails';
 import { AddressBook } from './AddressBook';
 import { DangerZone } from './DangerZone';
@@ -60,7 +58,7 @@ const ProfilePage: NextPage = async () => {
   }
 
   return (
-    <div className="h-[calc(100vh-10rem)]">
+    <div className="min-h-[calc(100vh-10rem)] h-full my-5 container mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-brand-font-color">My Profile</h1>
 
@@ -82,17 +80,9 @@ const ProfilePage: NextPage = async () => {
               <p className="text-gray-500">{profile.email}</p>
             </div>
           </article>
-
-          <article className="flex flex-col items-end space-y-2">
-            <Button size="sm">
-              <FaEdit className="inline-block mr-2" size={16} />
-              Edit
-            </Button>
-          </article>
         </div>
       </div>
-
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
         <PersonalDetails profile={profile} />
         <AddressBook />
         <DangerZone />

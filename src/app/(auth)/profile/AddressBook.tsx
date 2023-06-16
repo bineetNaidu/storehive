@@ -4,7 +4,7 @@ import { FaEdit } from 'react-icons/fa';
 
 export const AddressBook: FC = () => {
   return (
-    <div className="mt-4 border border-gray-200 rounded-md p-4 w-[500px] shadow-sm bg-gray-100">
+    <div className="mt-4 border border-gray-200 rounded-md p-4 w-full md:w-[500px] shadow-sm bg-gray-100">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold text-brand-font-color">
           Address Book
@@ -15,7 +15,7 @@ export const AddressBook: FC = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mt-4 w-96">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-96">
         <div className="flex flex-col space-y-1">
           <h2 className="text-sm">Country</h2>
           <p className="text-gray-700 font-medium">United kingdon</p>

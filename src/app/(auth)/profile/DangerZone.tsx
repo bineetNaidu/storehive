@@ -40,14 +40,14 @@ export const DangerZone: FC = () => {
   }, []);
 
   return (
-    <div className="mt-4 border border-gray-200 rounded-md p-4 w-[500px] shadow-sm bg-gray-100">
+    <div className="mt-4 border border-gray-200 rounded-md p-4 w-full md:w-[500px] shadow-sm bg-gray-100">
       <h1 className="text-2xl font-bold text-brand-font-color mb-2">
         Danger Zone
       </h1>
 
       <Button
         size="md"
-        className="bg-red-600"
+        className="bg-red-600 hover:bg-red-700 text-xs md:text-base font-medium"
         onClick={handleDeleteAccount}
         isLoading={loading}
       >
