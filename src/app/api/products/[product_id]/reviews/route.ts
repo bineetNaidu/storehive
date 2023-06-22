@@ -1,5 +1,5 @@
 import { authOptions } from '@/lib/auth-options';
-import { type Review } from '@prisma/client';
+import { Prisma, type Review } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -90,38 +90,55 @@ export async function POST(
     );
   }
 
-  const review = await prisma.review.create({
-    data: {
-      rating: validationResult.data.rating,
-      comment: validationResult.data.comment,
-      product: {
-        connect: {
-          id: parseInt(product_id),
+  try {
+    const review = await prisma.review.create({
+      data: {
+        rating: validationResult.data.rating,
+        comment: validationResult.data.comment,
+        product: {
+          connect: {
+            id: parseInt(product_id),
+          },
+        },
+        user: {
+          connect: {
+            id: session.user.id,
+          },
         },
       },
-      user: {
-        connect: {
-          id: session.user.id,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
         },
       },
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
+    });
+    return NextResponse.json(
+      {
+        result: review,
       },
-    },
-  });
+      { status: 201 }
+    );
+  } catch (error) {
+    let message = 'Something went wrong!';
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        message = 'You have already reviewed this product!.';
+      }
+    }
 
-  return NextResponse.json(
-    {
-      result: review,
-    },
-    { status: 201 }
-  );
+    return NextResponse.json(
+      {
+        errors: {
+          comment: [message],
+        },
+      },
+      { status: 500 }
+    );
+  }
 }
 
 export type CreateReviewByProductIdResponse = {

@@ -104,14 +104,30 @@ export const ProductCtx: FC<Props> = ({ product }) => {
 
       <div className="flex items-center mb-4">
         <div className="join lg:join-horizontal items-center border bg-gray-200 rounded-xl p-1">
-          <div className="join-item">
-            <Button varient="ghost" onClick={decrement}>
+          <div
+            className={`join-item ${quantity === 1 && 'cursor-not-allowed'}`}
+          >
+            <Button
+              varient="ghost"
+              onClick={decrement}
+              disabled={quantity === 1}
+            >
               -
             </Button>
           </div>
           <div className="join-item px-5">{quantity}</div>
-          <div className="join-item">
-            <Button varient="ghost" onClick={increment}>
+          <div
+            className={`join-item ${
+              quantity === product.stockCount &&
+              'tooltip tooltip-right tooltip-warning cursor-not-allowed'
+            }`}
+            data-tip="This is the maximum quantity available"
+          >
+            <Button
+              varient="ghost"
+              onClick={increment}
+              disabled={quantity === product.stockCount}
+            >
               +
             </Button>
           </div>

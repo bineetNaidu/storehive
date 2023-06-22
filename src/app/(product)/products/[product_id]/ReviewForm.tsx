@@ -77,6 +77,10 @@ export const ReviewForm: FC<Props> = ({ product_id }) => {
     return null;
   }
 
+  if (session.status === 'loading') {
+    return <div className="loading loading-spinner"></div>;
+  }
+
   return (
     <form
       className="flex flex-col border rounded-xl p-4 mb-4 w-full max-w-sm"
