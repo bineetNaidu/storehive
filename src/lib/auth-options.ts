@@ -94,12 +94,18 @@ export const authOptions: AuthOptions = {
       session.user.email = token.email;
       return session;
     },
-    jwt({ token, account, user }) {
+    jwt({ token, account, user, trigger, session }) {
       if (account) {
         token.accessToken = account.access_token;
         token.id = user.id;
         token.email = (user as User).email;
       }
+
+      if (trigger === 'update' && session) {
+        token.name = session.name;
+        token.email = session.email;
+      }
+
       return token;
     },
   },

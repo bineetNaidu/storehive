@@ -103,6 +103,11 @@ export const PersonalDetails: FC<Props> = ({ profile }) => {
 
       setIsEditingMode(false);
       setIsUpdating(false);
+      setError({
+        name: '',
+        image: '',
+        phoneNumber: '',
+      });
     } catch (error: any) {
       toast.error(error.message);
       setIsUpdating(false);
