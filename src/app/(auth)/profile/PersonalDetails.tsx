@@ -30,7 +30,7 @@ export const PersonalDetails: FC<Props> = ({ profile }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [name, setName] = useState(profile.name!);
   const [image, setImage] = useState(profile.image!);
-  const [phoneNumber, setPhoneNumber] = useState('+100 9876543210');
+  const [phoneNumber, setPhoneNumber] = useState('9876543210');
   const [error, setError] = useState({
     name: '',
     image: '',
@@ -101,6 +101,9 @@ export const PersonalDetails: FC<Props> = ({ profile }) => {
         icon: <BsCheck2Circle size={15} />,
       });
 
+      setName(data.result.name!);
+      setImage(data.result.image!);
+
       setIsEditingMode(false);
       setIsUpdating(false);
       setError({
@@ -156,7 +159,7 @@ export const PersonalDetails: FC<Props> = ({ profile }) => {
               placeholder="John Doe"
             />
           ) : (
-            <p className="text-gray-700 font-medium">{profile.name}</p>
+            <p className="text-gray-700 font-medium">{name}</p>
           )}
         </div>
 
@@ -192,7 +195,7 @@ export const PersonalDetails: FC<Props> = ({ profile }) => {
             />
           ) : (
             <Image
-              src={profile.image!}
+              src={image!}
               alt="Profile Image"
               width={30}
               height={30}
