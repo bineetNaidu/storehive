@@ -51,16 +51,26 @@ export const CartModal: FC<Props> = ({ isOpen, toggle }) => {
                 <p className="flex">
                   Quantity:
                   <div className="flex ml-2">
-                    <Button
-                      size="sm"
-                      onClick={() => increaseQuantity(item.product.id)}
+                    <div
+                      className={`join-item ${
+                        item.quantity === item.product.stockCount &&
+                        'tooltip tooltip-top tooltip-warning cursor-not-allowed'
+                      }`}
+                      data-tip="This is the maximum quantity available"
                     >
-                      +
-                    </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => increaseQuantity(item.product.id)}
+                        disabled={item.quantity === item.product.stockCount}
+                      >
+                        +
+                      </Button>
+                    </div>
                     <span className="mx-1">{item.quantity}</span>
                     <Button
                       size="sm"
                       onClick={() => decreaseQuantity(item.product.id)}
+                      disabled={item.quantity === 1}
                     >
                       -
                     </Button>

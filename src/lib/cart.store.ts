@@ -1,16 +1,22 @@
-import { type Product } from '@prisma/client';
+import type { Product } from '@prisma/client';
 import { create } from 'zustand';
 
 type CartItem = {
   quantity: number;
   product: Product;
 };
+
+type AddToCartOptions = {
+  quantity: number;
+  product: Product;
+};
+
 interface CartStore {
   cart: CartItem[];
   totalPrice: number;
   totalItems: number;
 
-  addToCart: (product: Product, quantity: number) => void;
+  addToCart: (options: AddToCartOptions) => void;
   removeFromCart: (productId: number, quantity?: number) => void;
   increaseQuantity: (productId: number) => void;
   decreaseQuantity: (productId: number) => void;
@@ -22,7 +28,7 @@ export const useCartStore = create<CartStore>((set) => ({
   totalPrice: 0,
   totalItems: 0,
 
-  addToCart: (product, quantity) => {
+  addToCart: ({ product, quantity }) => {
     return set((state) => {
       const item = state.cart.find((item) => item.product.id === product.id);
       if (item) {

@@ -29,7 +29,7 @@ export const ProductCtx: FC<Props> = ({ product }) => {
   const addToCart = useCartStore((state) => state.addToCart);
 
   const handleAddToCart = useCallback(() => {
-    addToCart(product, quantity);
+    addToCart({ product, quantity });
   }, [addToCart, product, quantity]);
 
   return (
