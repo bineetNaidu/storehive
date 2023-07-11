@@ -1,17 +1,22 @@
-'use client';
-
 import { CreateReviewByProductIdResponse } from '@/app/api/products/[product_id]/reviews/route';
 import { Button } from '@/components/Button';
 import { InputField } from '@/components/InputField';
+import { GetResult } from '@prisma/client/runtime';
 import { useSession } from 'next-auth/react';
 import { FC, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 
 type Props = {
   product_id: string;
+  handleAddReviewToState: (
+    review: CreateReviewByProductIdResponse['result']
+  ) => void;
 };
 
-export const ReviewForm: FC<Props> = ({ product_id }) => {
+export const ReviewForm: FC<Props> = ({
+  product_id,
+  handleAddReviewToState,
+}) => {
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +65,7 @@ export const ReviewForm: FC<Props> = ({ product_id }) => {
           comment: '',
         });
         setIsLoading(false);
+        handleAddReviewToState(data.result);
       } else {
         setError({
           rating: data.errors.rating?.join(', ') ?? '',
@@ -70,7 +76,7 @@ export const ReviewForm: FC<Props> = ({ product_id }) => {
 
       setIsLoading(false);
     },
-    [rating, comment, product_id]
+    [rating, comment, product_id, handleAddReviewToState]
   );
 
   if (session.status === 'unauthenticated') {

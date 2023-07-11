@@ -1,5 +1,3 @@
-'use client';
-
 import type { DeleteReviewResponse } from '@/app/api/products/[product_id]/reviews/[review_id]/route';
 import { Button } from '@/components/Button';
 import { useSession } from 'next-auth/react';
@@ -11,12 +9,14 @@ type Props = {
   reviewId: number;
   createdUserId: string;
   productId: string;
+  handleRemoveReviewFromState: (reviewId: number) => void;
 };
 
 export const ReviewCtx: FC<Props> = ({
   productId,
   reviewId,
   createdUserId,
+  handleRemoveReviewFromState,
 }) => {
   const [loading, setLoading] = useState(false);
   const session = useSession();
@@ -43,6 +43,7 @@ export const ReviewCtx: FC<Props> = ({
         throw new Error(data.error);
       } else {
         toast.success(`Review Deleted! id: ${data.result!.deleted_id}`);
+        handleRemoveReviewFromState(reviewId);
       }
       setLoading(false);
     } catch (error: any) {

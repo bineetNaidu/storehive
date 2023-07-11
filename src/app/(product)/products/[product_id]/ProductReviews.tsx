@@ -1,32 +1,56 @@
-import type { GetReviewsByProductIdResponse } from '@/app/api/products/[product_id]/reviews/route';
+'use client';
+
+import type {
+  CreateReviewByProductIdResponse,
+  GetReviewsByProductIdResponse,
+} from '@/app/api/products/[product_id]/reviews/route';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
 import { ReviewForm } from './ReviewForm';
 import { ReviewCtx } from './ReviewCtx';
+import { Review } from '@prisma/client';
 
 type Props = {
   product_id: string;
 };
 
 const fetchReviews = async (product_id: string) => {
-  const res = await fetch(
-    `http://localhost:3000/api/products/${product_id}/reviews?limit=20`,
-    {
-      next: {
-        revalidate: 2,
-      },
-    }
-  );
+  const res = await fetch(`/api/products/${product_id}/reviews?limit=20`, {
+    next: {
+      revalidate: 2,
+    },
+  });
   const data: GetReviewsByProductIdResponse = await res.json();
   return data.result;
 };
 
-export const ProductReviews: FC<Props> = async ({ product_id }) => {
-  const reviews = await fetchReviews(product_id);
+export const ProductReviews: FC<Props> = ({ product_id }) => {
+  const [reviews, setReviews] = useState<
+    GetReviewsByProductIdResponse['result']
+  >([]);
+
+  const handleAddReviewToState = useCallback(
+    (review: CreateReviewByProductIdResponse['result']) => {
+      setReviews((reviews) => [review, ...reviews]);
+    },
+
+    []
+  );
+
+  const handleRemoveReviewFromState = useCallback((reviewId: number) => {
+    setReviews((reviews) => reviews.filter((review) => review.id !== reviewId));
+  }, []);
+
+  useEffect(() => {
+    fetchReviews(product_id).then((reviews) => setReviews(reviews));
+  }, [product_id]);
 
   return (
     <div className="p-4 text-brand-font-color">
-      <ReviewForm product_id={product_id} />
+      <ReviewForm
+        product_id={product_id}
+        handleAddReviewToState={handleAddReviewToState}
+      />
       <h2 className="text-2xl font-bold mb-4">Reviews</h2>
       {reviews.length === 0 && (
         <p className="text-sm font-normal text-gray-500 mb-1 italic ml-2">
@@ -82,6 +106,7 @@ export const ProductReviews: FC<Props> = async ({ product_id }) => {
             </p>
           </div>
           <ReviewCtx
+            handleRemoveReviewFromState={handleRemoveReviewFromState}
             createdUserId={review.userId}
             productId={product_id}
             reviewId={review.id}
