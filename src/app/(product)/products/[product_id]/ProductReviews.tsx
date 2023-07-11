@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { FC, useState, useEffect, useCallback } from 'react';
 import { ReviewForm } from './ReviewForm';
 import { ReviewCtx } from './ReviewCtx';
-import { Review } from '@prisma/client';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type Props = {
   product_id: string;
@@ -57,62 +57,71 @@ export const ProductReviews: FC<Props> = ({ product_id }) => {
           No reviews yet
         </p>
       )}
-      {reviews.map((review) => (
-        <div className="flex items-center mb-4" key={review.id}>
-          <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-            <Image
-              src={review.user.image || '/images/default-avatar.png'}
-              alt={review.user.name || 'User'}
-              width={48}
-              height={48}
-            />
-          </div>
-          <div className="flex flex-col mr-2">
-            <p className="text-sm font-bold">{review.user.name || 'User'}</p>
-            <div className="rating rating-sm">
-              <input
-                type="radio"
-                readOnly
-                className="mask mask-star-2 bg-brand-secondary"
-                checked={review.rating === 1}
-              />
-              <input
-                type="radio"
-                readOnly
-                className="mask mask-star-2 bg-brand-secondary"
-                checked={review.rating === 2}
-              />
-              <input
-                type="radio"
-                readOnly
-                className="mask mask-star-2 bg-brand-secondary"
-                checked={review.rating === 3}
-              />
-              <input
-                type="radio"
-                readOnly
-                className="mask mask-star-2 bg-brand-secondary"
-                checked={review.rating === 4}
-              />
-              <input
-                type="radio"
-                readOnly
-                className="mask mask-star-2 bg-brand-secondary"
-                checked={review.rating === 5}
+      <AnimatePresence mode="wait">
+        {reviews.map((review) => (
+          <motion.div
+            className="flex items-center mb-4"
+            key={review.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <Image
+                src={review.user.image || '/images/default-avatar.png'}
+                alt={review.user.name || 'User'}
+                width={48}
+                height={48}
               />
             </div>
-            <p className="text-sm font-normal text-gray-500 mb-1 italic">
-              {review.comment}
-            </p>
-          </div>
-          <ReviewCtx
-            handleRemoveReviewFromState={handleRemoveReviewFromState}
-            createdUserId={review.userId}
-            productId={product_id}
-            reviewId={review.id}
-          />
-        </div>
-      ))}
+            <div className="flex flex-col mr-2">
+              <p className="text-sm font-bold">{review.user.name || 'User'}</p>
+              <div className="rating rating-sm">
+                <input
+                  type="radio"
+                  readOnly
+                  className="mask mask-star-2 bg-brand-secondary"
+                  checked={review.rating === 1}
+                />
+                <input
+                  type="radio"
+                  readOnly
+                  className="mask mask-star-2 bg-brand-secondary"
+                  checked={review.rating === 2}
+                />
+                <input
+                  type="radio"
+                  readOnly
+                  className="mask mask-star-2 bg-brand-secondary"
+                  checked={review.rating === 3}
+                />
+                <input
+                  type="radio"
+                  readOnly
+                  className="mask mask-star-2 bg-brand-secondary"
+                  checked={review.rating === 4}
+                />
+                <input
+                  type="radio"
+                  readOnly
+                  className="mask mask-star-2 bg-brand-secondary"
+                  checked={review.rating === 5}
+                />
+              </div>
+              <p className="text-sm font-normal text-gray-500 mb-1 italic">
+                {review.comment}
+              </p>
+            </div>
+            <ReviewCtx
+              handleRemoveReviewFromState={handleRemoveReviewFromState}
+              createdUserId={review.userId}
+              productId={product_id}
+              reviewId={review.id}
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 };

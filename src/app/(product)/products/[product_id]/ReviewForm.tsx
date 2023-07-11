@@ -71,7 +71,10 @@ export const ReviewForm: FC<Props> = ({
           rating: data.errors.rating?.join(', ') ?? '',
           comment: data.errors.comment?.join(', ') ?? '',
         });
-        toast.error('Something went wrong while submitting the review');
+        toast.error(
+          data.errors.comment?.join(', ') ??
+            'Something went wrong while submitting the review'
+        );
       }
 
       setIsLoading(false);
